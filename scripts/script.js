@@ -1,12 +1,12 @@
-class FetchData {
+class FetchData {					//класс сетевого запроса на вытягивание данных из json
     getResource = async url => {
-      const res = await fetch(url);
+      const res = await fetch(url); //вытягивание начинается только после полной загрузки данных
   
       if (!res.ok) {
-        throw new Error("Произошла ошибка:" + res.status);
+        throw new Error("Произошла ошибка:" + res.status); //вызовет ошибку и распечатает ее статус если response не будет успешным
       }
   
-      return res.json();
+      return res.json(); //возвращены данные в формате json
     }
   
     getPost = async () => await this.getResource('db/database.json');
@@ -52,7 +52,7 @@ class FetchData {
       this.elements.showLikedPostElem.addEventListener('click', this.showLikesPost)
     }
   
-  
+  	//метод устанавливающий аватар юзера
     setAvatarOfLoginnedUser(avatarElems, avatarPathCss) {
       //Если у user есть аватар, то ставим, если нет, то не трогаем и будет стоять аватар по умолчанию который в верстке
       if (avatarPathCss) {
@@ -122,7 +122,8 @@ class FetchData {
     showAllPost() {
       this.renderPosts(this.tweets.posts)
     }
-  
+  	
+  	//метод обрабатывающий события в модальном окне создания поста
     handlerModal({ button, modal, overlay, close }) {
       const buttonElem = document.querySelector(button);
       const modalElem = document.querySelector(modal);
@@ -156,7 +157,7 @@ class FetchData {
       const imgElem = document.querySelector(img);
       const submitElem = document.querySelector(submit);
   
-      //По умолчанию кнопка недоступна
+      //По умолчанию кнопка tweet недоступна
       submitElem.disabled = true;
   
       let imgUrl = '';
@@ -181,7 +182,7 @@ class FetchData {
         }
       });
   
-      //Слушаем textarea на изменения, если проверка выполнена, то кнопку можно нажать
+      //Слушаем textarea на изменения, если проверка выполнена, то кнопку tweet можно нажать
       textElem.addEventListener("DOMSubtreeModified", () => {
         if (textElem.textContent !== tempString && textElem.textContent !== '') {
           submitElem.disabled = false;
@@ -211,7 +212,8 @@ class FetchData {
       this.sortDate = !this.sortDate;
       this.showAllPost();
     }
-  
+  	
+  	//метод меняющий сортировку постов (по дате и по лайкам)
     sortFields() {
       if (this.sortDate) {
         return (a, b) => {
@@ -234,7 +236,7 @@ class FetchData {
       this.posts.push(new Post(tweet));
     }
   
-    deletePost(id) {
+    deletePost(id) { //метод создающий новый список постов, в котором не содержится пост переданный по id(удаленный пост)
       this.posts = this.posts.filter(item => item.id !== id);
     }
   
@@ -283,7 +285,8 @@ class FetchData {
       }
       return this.postDate.toLocaleString('ru-RU', options);
     }
-  
+  	
+  	//метод приводящий дату к корректному формату, который поддерживают браузеры
     correctDate(date) {
       if (isNaN(Date.parse(date))) {
         date = date.replace(/\./g, '/');
@@ -316,7 +319,7 @@ class FetchData {
         submit: '.modal .tweet-form__btn',
       },
   
-      //Передаю еще один tweetElem, который уже не в modal. Так как querySelector, используемый мной при поиске элементов берет первый попавшийся результат, он возьмет поле создания твита в начале страницы(наверное)
+      //Передаю еще один tweetElem, который уже не в modal. Так как querySelector, используемый мной при поиске элементов берет первый попавшийся результат, он возьмет поле создания твита в начале страницы
       {
         text: '.tweet-form__text',
         img: '.tweet-img__btn',
